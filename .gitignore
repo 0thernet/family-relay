@@ -1,0 +1,8 @@
+.relay/
+.env
+.env.*
+__pycache__/
+*.pyc
+.DS_Store
+.railway/
+*.secret
