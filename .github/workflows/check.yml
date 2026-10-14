@@ -1,0 +1,25 @@
+name: Check
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  required:
+    name: Required
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Offline contract tests
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          python3 -m unittest discover -s tests -v
+          bash -n scripts/ovh-install.sh scripts/image-guard.sh
+      - name: Build the runtime
+        run: docker build --pull -t family-relay:check .
+      - name: Validate and start both transports
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python3 scripts/check-container.py --image family-relay:check
