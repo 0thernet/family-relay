@@ -1,0 +1,8 @@
+.git/
+.relay/
+.env
+.env.*
+__pycache__/
+tests/
+docs/
+*.secret
